@@ -96,12 +96,10 @@ public class Juego {
         setPiezaSeleccionada(getPieza((int) e.getX(), (int) e.getY()));
                 
         if (piezaSeleccionada != null) {
+            System.out.println("Position x: " + piezaSeleccionada.getX() + " y: " + piezaSeleccionada.getY());
             piezaSeleccionada.getPosibleMoves().forEach(m -> System.out.println(m.getX() + "    " + m.getY()));
             if (piezaSeleccionada.getColor() != turn) 
-                piezaSeleccionada = null;
-                
-            
-            
+                piezaSeleccionada = null;     
         }
         
         if (isCheck()){
@@ -132,7 +130,7 @@ public class Juego {
 
                     // Verifica si el movimiento fue un enroque y lo realiza 
                     if ((piezaSeleccionada.getName().equals(PieceName.KING)))
-                        enroque(); 
+                        castle(); 
                     
                     piezaSeleccionada.findPosibleMoves();
 
@@ -169,7 +167,7 @@ public class Juego {
     }
     
     
-    public void enroque() {
+    public void castle() {
         if (piezaSeleccionada != null) {
                            
             // Verifica que el movimiento haya sido de enroque corto
@@ -260,14 +258,21 @@ public class Juego {
         return false;
     }
     
-    public Pieza findByPosition(int x, int y) {
+    public static Pieza findByPosition(int x, int y) {
         
         for (Pieza actualPieza : piezas) {
             if (actualPieza.getX() == x && actualPieza.getY() == y)
                 return actualPieza;
         }
-        return null;    
+        return null;
     }
+    
+    /*public void onPassant() {
+        if (piezaSeleccionada != null) {
+            if (piezaSeleccionada.getName() == PieceName.PAWN &&
+                    piezaSeleccionada.getY() == )
+        }
+    }*/
     
     private boolean isInRange(int x, int y, int xInf, int yInf) {
         return (x >= (xInf * Const.SQR_SIDE) 

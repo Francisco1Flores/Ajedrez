@@ -103,6 +103,7 @@ public class Moves {
                 }
             }   
         }
+        onPassant(pieza, piezas, moves);
         return moves;
     }
     
@@ -323,6 +324,34 @@ public class Moves {
                     moves.add(new Position(x, y));
                     c++;
                 }else c++;
+            }
+        }
+    }
+
+    private static void onPassant(Pieza pieza, List<Pieza> piezas, List<Position> moves) {
+        if (pieza.getColor()) {
+            if (pieza.getY() == 3) {
+                for (int x = pieza.getX() - 1; x <= pieza.getX() +1; x += 2) {
+                    Pieza sidePawn = Juego.findByPosition(x, pieza.getY());
+                    if (sidePawn != null) {
+                        if (sidePawn.getName().equals(PieceName.PAWN) &&
+                            sidePawn.getMovements() == 1) {
+                            moves.add(new Position(x, pieza.getY() - 1));
+                        }
+                    }
+                }
+            }
+        } else {
+            if (pieza.getY() == 4) {
+                for (int x = pieza.getX() - 1; x <= pieza.getX() +1; x += 2) {
+                    Pieza sidePawn = Juego.findByPosition(x, pieza.getY());
+                    if (sidePawn != null) {
+                        if (sidePawn.getName().equals(PieceName.PAWN) &&
+                            sidePawn.getMovements() == 1) {
+                            moves.add(new Position(x, pieza.getY() + 1));
+                        }
+                    }
+                }
             }
         }
     }
