@@ -333,9 +333,10 @@ public class Moves {
             if (pieza.getY() == 3) {
                 for (int x = pieza.getX() - 1; x <= pieza.getX() +1; x += 2) {
                     Pieza sidePawn = Juego.findByPosition(x, pieza.getY());
-                    if (sidePawn != null) {
+                    if (sidePawn != null && Juego.getLastMovedPiece() != null) {
                         if (sidePawn.getName().equals(PieceName.PAWN) &&
-                            sidePawn.getMovements() == 1) {
+                            sidePawn.getMovements() == 1 &&
+                            Juego.getLastMovedPiece() == sidePawn) {
                             moves.add(new Position(x, pieza.getY() - 1));
                         }
                     }
@@ -345,9 +346,10 @@ public class Moves {
             if (pieza.getY() == 4) {
                 for (int x = pieza.getX() - 1; x <= pieza.getX() +1; x += 2) {
                     Pieza sidePawn = Juego.findByPosition(x, pieza.getY());
-                    if (sidePawn != null) {
+                    if (sidePawn != null&& Juego.getLastMovedPiece() != null) {
                         if (sidePawn.getName().equals(PieceName.PAWN) &&
-                            sidePawn.getMovements() == 1) {
+                            sidePawn.getMovements() == 1 &&
+                            Juego.getLastMovedPiece() == sidePawn) {
                             moves.add(new Position(x, pieza.getY() + 1));
                         }
                     }

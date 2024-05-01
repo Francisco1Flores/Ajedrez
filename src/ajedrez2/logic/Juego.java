@@ -12,6 +12,7 @@ public class Juego {
     private static List<Pieza> piezas = new ArrayList();
     
     Pieza piezaSeleccionada = null;
+    private static Pieza lastMovedPiece = null;
     
     List<Position> posibleMoves;
     
@@ -78,6 +79,10 @@ public class Juego {
         return piezaSeleccionada;
     }
     
+    public static Pieza getLastMovedPiece() {
+        return lastMovedPiece;
+    }
+    
     public static List<Pieza> getListaPiezas() {
         return piezas;
     }
@@ -125,14 +130,15 @@ public class Juego {
                     // Cambia las coordenadas de la pieza a las de la nueva casilla
                     
                     piezaSeleccionada.setXY(move.getX(), move.getY(), true);
-                   
-
+                    
                     // Verifica si el movimiento fue un enroque y lo realiza 
                     if ((piezaSeleccionada.getName().equals(PieceName.KING)))
                         castle();
                     
                     if (piezaSeleccionada.getName().equals(PieceName.PAWN))
                         enPassant();
+                    
+                    lastMovedPiece = piezaSeleccionada;
                             
                     piezaSeleccionada.findPosibleMoves();
 
@@ -284,8 +290,6 @@ public class Juego {
                                 && backPawn.getPreviousY() == backPawn.getY() - 2)
                             backPawn.died();
                     }
-                        
-                        
                 }
             } else {
                 if (piezaSeleccionada.getY() - 1 == piezaSeleccionada.getPreviousY() &&
@@ -298,7 +302,6 @@ public class Juego {
                                 && backPawn.getPreviousY() == backPawn.getY() + 2)
                             backPawn.died();
                 }
-                
             }          
         }
     }
