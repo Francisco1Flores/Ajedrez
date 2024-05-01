@@ -110,7 +110,7 @@ public class Pieza {
         return movements;
     }
     
-    public boolean getColor() {
+    public boolean isWhite() {
         return color;
     }
     
@@ -160,6 +160,10 @@ public class Pieza {
 
     void setMovements(int i) {
         movements = i;
+    }
+    
+    public void died() {
+        Juego.getListaPiezas().remove(this);
     }
     
     private void loadSprite() {

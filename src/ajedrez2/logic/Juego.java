@@ -1,6 +1,5 @@
 package ajedrez2.logic;
 
-
 import ajedrez2.Const;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -98,7 +97,7 @@ public class Juego {
         if (piezaSeleccionada != null) {
             System.out.println("Position x: " + piezaSeleccionada.getX() + " y: " + piezaSeleccionada.getY());
             piezaSeleccionada.getPosibleMoves().forEach(m -> System.out.println(m.getX() + "    " + m.getY()));
-            if (piezaSeleccionada.getColor() != turn) 
+            if (piezaSeleccionada.isWhite() != turn) 
                 piezaSeleccionada = null;     
         }
         
@@ -130,8 +129,11 @@ public class Juego {
 
                     // Verifica si el movimiento fue un enroque y lo realiza 
                     if ((piezaSeleccionada.getName().equals(PieceName.KING)))
-                        castle(); 
+                        castle();
                     
+                    if (piezaSeleccionada.getName().equals(PieceName.PAWN))
+                        enPassant();
+                            
                     piezaSeleccionada.findPosibleMoves();
 
                     System.out.println(piezaSeleccionada.getMovements());
@@ -205,7 +207,7 @@ public class Juego {
         for (Pieza cPieza : piezas) {
             cPieza.findPosibleMoves();
             for (Position move : cPieza.getPosibleMoves()) {
-                if (move.getX() == king.getX() && move.getY() == king.getY() && cPieza.getColor() != turn) {
+                if (move.getX() == king.getX() && move.getY() == king.getY() && cPieza.isWhite() != turn) {
                     System.out.println("encontrado jaque");
                     check = true;
                     return true;
@@ -219,7 +221,7 @@ public class Juego {
     
     public void dragPiece(MouseEvent e) {
         
-        if (piezaSeleccionada != null && turn == piezaSeleccionada.getColor()) {
+        if (piezaSeleccionada != null && turn == piezaSeleccionada.isWhite()) {
             piezaSeleccionada.drag(e.getX(), e.getY());
         }
     }
@@ -267,12 +269,39 @@ public class Juego {
         return null;
     }
     
-    /*public void onPassant() {
+    public void enPassant() {
         if (piezaSeleccionada != null) {
-            if (piezaSeleccionada.getName() == PieceName.PAWN &&
-                    piezaSeleccionada.getY() == )
+            
+            Pieza backPawn;
+            if (piezaSeleccionada.isWhite()) {
+                if (piezaSeleccionada.getY() + 1 == piezaSeleccionada.getPreviousY() &&
+                    (piezaSeleccionada.getX() + 1 == piezaSeleccionada.getPreviousX() ||
+                     piezaSeleccionada.getX() - 1 == piezaSeleccionada.getPreviousX())) {
+                    backPawn = findByPosition(piezaSeleccionada.getX(), piezaSeleccionada.getY() + 1);
+                    if (backPawn != null) {
+                        if (backPawn.getName().equals(PieceName.PAWN) 
+                                && piezaSeleccionada.isWhite() != backPawn.isWhite()
+                                && backPawn.getPreviousY() == backPawn.getY() - 2)
+                            backPawn.died();
+                    }
+                        
+                        
+                }
+            } else {
+                if (piezaSeleccionada.getY() - 1 == piezaSeleccionada.getPreviousY() &&
+                    (piezaSeleccionada.getX() + 1 == piezaSeleccionada.getPreviousX() ||
+                     piezaSeleccionada.getX() - 1 == piezaSeleccionada.getPreviousX())) {
+                    backPawn = findByPosition(piezaSeleccionada.getX(), piezaSeleccionada.getY() - 1);
+                    if (backPawn != null)
+                        if (backPawn.getName().equals(PieceName.PAWN) 
+                                && piezaSeleccionada.isWhite() != backPawn.isWhite() 
+                                && backPawn.getPreviousY() == backPawn.getY() + 2)
+                            backPawn.died();
+                }
+                
+            }          
         }
-    }*/
+    }
     
     private boolean isInRange(int x, int y, int xInf, int yInf) {
         return (x >= (xInf * Const.SQR_SIDE) 
