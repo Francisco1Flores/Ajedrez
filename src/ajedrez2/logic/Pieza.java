@@ -1,7 +1,7 @@
 package ajedrez2.logic;
 
 import ajedrez2.Const;
-import ajedrez2.logic.Juego;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -15,15 +15,13 @@ public class Pieza {
     private PieceName name;
     private Position position;
     private List<Position> movesList;
+    private boolean alive;
     private int x;
     private int y;
     private int xToPaint;
     private int yToPaint;
     private int previousX;
     private int previousY;
-    private int simulateX;
-    private int simulateY;
-    private boolean simulateState;
     private final boolean color;
     private int movements;
     private final Juego juego;
@@ -35,8 +33,6 @@ public class Pieza {
         this.juego = juego;
         this.name = name;
         position = new Position(x,y);
-        simulateX = x;
-        simulateY = y;
         this.x = x;
         this.y = y;
         xToPaint = this.x * Const.SQR_SIDE;
@@ -45,7 +41,7 @@ public class Pieza {
         previousY = y;
         this.color = color;
         movements = 0;
-        simulateState = true;
+        alive = true;
         
         findPosibleMoves();
         
@@ -128,24 +124,38 @@ public class Pieza {
         yToPaint = y - (Const.H_SQR_SIDE_Y + Const.SUP_BAR_HEIGHT);
     }
     
-    void simulateMove(int x, int y, Pieza piece) {
+    void simulateMove(int x, int y, Pieza piece){
+        if (piece != null) {
+            piece.simulateDeath();
+        }
         previousX = this.x;
         previousY = this.y;
         this.x = x;
         this.y = y;
     }
 
-    public void backMove() {
+    public boolean isAlive() {
+        return alive;
+    }
+
+    private void simulateDeath() {
+        alive = false;
+    }
+
+    public void backMove(Pieza piece) {
         this.x = previousX;
         this.y = previousY;
+        if (piece != null) {
+            piece.cancelDeath();
+        }
     }
-    
+
+    private void cancelDeath() {
+        alive = true;
+    }
+
     public void take() {
         Juego.getListaPiezas().remove(this);      
-    }
-    
-    public void simulateTake(Pieza piece) {
-        piece.simulateState = false;
     }
     
     public List<Position> getPosibleMoves() {

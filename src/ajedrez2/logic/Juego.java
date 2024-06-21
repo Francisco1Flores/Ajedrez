@@ -205,11 +205,13 @@ public class Juego {
         
         for (Pieza cPieza : piezas) {
             cPieza.findPosibleMoves();
-            for (Position move : cPieza.getPosibleMoves()) {
-                if (move.getX() == king.getX() && move.getY() == king.getY() && cPieza.isWhite() != turn) {
-                    System.out.println("encontrado jaque");
-                    check = true;
-                    return true;
+            if (cPieza.isAlive()) {
+                for (Position move : cPieza.getPosibleMoves()) {
+                    if (move.getX() == king.getX() && move.getY() == king.getY() && cPieza.isWhite() != turn) {
+                        System.out.println("encontrado jaque");
+                        check = true;
+                        return true;
+                    }
                 }
             }
         }
@@ -246,10 +248,10 @@ public class Juego {
     private boolean coverCheck(Position move) {
         piezaSeleccionada.simulateMove(move.getX(), move.getY(), findByPosition(move.getX(), move.getY()));
         if (!isCheck()) {
-            piezaSeleccionada.backMove();
+            piezaSeleccionada.backMove(findByPosition(move.getX(), move.getY()));
             return true;
         }
-        piezaSeleccionada.backMove();
+        piezaSeleccionada.backMove(findByPosition(move.getX(), move.getY()));
         return false;
     }
     
