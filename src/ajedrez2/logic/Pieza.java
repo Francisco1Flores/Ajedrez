@@ -67,7 +67,7 @@ public class Pieza {
     }
     
     public void setXY(int x, int y, boolean t) {
-        Pieza pieceInSquare = juego.findByPosition(x, y);
+        Pieza pieceInSquare = Juego.findByPosition(x, y);
         if (pieceInSquare != null)
             pieceInSquare.take();
               
@@ -119,15 +119,13 @@ public class Pieza {
     }
 
     public void move(int x, int y) {
-
         xToPaint = (x / Const.SQR_SIDE) * Const.SQR_SIDE;
         yToPaint = ((y - Const.SUP_BAR_HEIGHT)  / Const.SQR_SIDE) * Const.SQR_SIDE;
     }
     
     public void drag(int x, int y) {
-        xToPaint = x - Const.H_SQR_SIDE; 
-        yToPaint = y - (Const.H_SQR_SIDE + Const.SUP_BAR_HEIGHT);
-                
+        xToPaint = x - Const.H_SQR_SIDE;
+        yToPaint = y - (Const.H_SQR_SIDE_Y + Const.SUP_BAR_HEIGHT);
     }
     
     void simulateMove(int x, int y, Pieza piece) {
@@ -135,8 +133,8 @@ public class Pieza {
         previousY = this.y;
         this.x = x;
         this.y = y;
-        
     }
+
     public void backMove() {
         this.x = previousX;
         this.y = previousY;
@@ -167,7 +165,6 @@ public class Pieza {
     }
     
     private void loadSprite() {
-        
         if (this.color) {
             try {
             sprite = ImageIO.read(new File("Sprites/" + name.toString() + "_W.png"));

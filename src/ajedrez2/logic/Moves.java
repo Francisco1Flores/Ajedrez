@@ -4,15 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Moves {
-    
-    //private List<Position> moves = new ArrayList();
-    
+
     private static final int[][] cm = {{2,1}, {1,2}, {-1,2}, {-2,1}, {-2,-1}, {-1,-2}, {1,-2}, {2,-1}};
-    
-    
-    
-    public static List<Position> getMoves(Pieza pieza, List piezas) {
-        
+
+    public static List<Position> getMoves(Pieza pieza, List<Pieza> piezas) {
         if (pieza.getName().equals(PieceName.PAWN)) {
             return getPeonMoves(pieza, piezas);
         }
@@ -38,24 +33,20 @@ public class Moves {
         moves.add(new Position(8,8));
         
         boolean pieceInFront = false;
-        boolean PieceInFront2Sqr = false;
+        boolean pieceInFront2Sqr = false;
         
         // Verifica si hay una pieza adelante del peon a 1 o 2 casillas
         for (Pieza tPieza : piezas) {
             if (pieza.isWhite()) {
                 if (tPieza.getX() == pieza.getX() && tPieza.getY() == pieza.getY() - 1)
                     pieceInFront = true;
-                
                 if (tPieza.getX() == pieza.getX() && tPieza.getY() == pieza.getY() - 2)
-                    PieceInFront2Sqr = true;
-                
+                    pieceInFront2Sqr = true;
             } else {
                 if (tPieza.getX() == pieza.getX() && tPieza.getY() == pieza.getY() + 1)
                     pieceInFront = true;
-                
-                
                 if (tPieza.getX() == pieza.getX() && tPieza.getY() == pieza.getY() + 2)
-                    PieceInFront2Sqr = true;
+                    pieceInFront2Sqr = true;
             }
         }
         
@@ -64,17 +55,16 @@ public class Moves {
             if (pieza.getMovements() == 0) {
                 if (pieza.isWhite()) {
                     moves.add(new Position(pieza.getX(),pieza.getY() - 1));
-                    if (!PieceInFront2Sqr)
+                    if (!pieceInFront2Sqr)
                         moves.add(new Position(pieza.getX(),pieza.getY() - 2));
                 } else {
                     moves.add(new Position(pieza.getX(),pieza.getY() + 1));
-                    if (!PieceInFront2Sqr)
+                    if (!pieceInFront2Sqr)
                         moves.add(new Position(pieza.getX(),pieza.getY() + 2));
                 }
             } else {
                 if (pieza.isWhite()) {
                     moves.add(new Position(pieza.getX(),pieza.getY() - 1));
-
                 } else {
                     moves.add(new Position(pieza.getX(),pieza.getY() + 1));
                 }
@@ -106,7 +96,6 @@ public class Moves {
         onPassant(pieza, piezas, moves);
         return moves;
     }
-    
 
     private static List<Position> getTorreMoves(Pieza pieza, List<Pieza> piezas) {
         List<Position> moves = new ArrayList();
@@ -114,15 +103,12 @@ public class Moves {
         return moves;          
     }
 
-    
     private static List<Position> getCaballoMoves(Pieza pieza, List<Pieza> piezas) {
         List<Position> moves = new ArrayList();
         
         for(int i = 0; i < 8; i++ ) {
-            
             boolean samePosition = false;
             boolean difColor = false;
-            
             int x = pieza.getX() + cm[i][0];
             int y = pieza.getY() + cm[i][1];
             
@@ -134,9 +120,7 @@ public class Moves {
                     }
                 }
             }
-            
-            if (!samePosition || (samePosition && difColor)) moves.add(new Position(x, y));
-           
+            if (!samePosition || difColor) moves.add(new Position(x, y));
         }
         return moves;
     }
@@ -165,16 +149,12 @@ public class Moves {
         
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
-                
                 boolean samePositionAndColor = false;
-                
                 int x = pieza.getX() + j;
                 int y = pieza.getY() + i;
                 
                 if (x >= 0 && x <= 7 && y >= 0 && y <= 7) {
-                    
                     for (Pieza tPieza : piezas) {
-                        
                         if (tPieza.getX() == x && tPieza.getY() == y
                             && tPieza.isWhite() == pieza.isWhite()) {
                             samePositionAndColor = true;
@@ -195,7 +175,6 @@ public class Moves {
                 moves.add(new Position(pieza.getX() - 2, pieza.getY()));
             }
         }
-        
         return moves;
     }
     
@@ -231,7 +210,6 @@ public class Moves {
     }
     
     public static Pieza findByposition(List<Pieza> piezas, int x, int y) {
-        
         for (Pieza actualPieza : piezas) {
             if (actualPieza.getX() == x && actualPieza.getY() == y)
                 return actualPieza;
@@ -242,88 +220,75 @@ public class Moves {
     private static void addDiagonalMoves(Pieza pieza, List<Pieza> piezas,  List<Position> moves) {
         for (int i = 0; i < 4; i++) {
             boolean moveIsPosible = true;
+            boolean samePosition = false;
+            boolean difColor = false;
             int c = 1;
             int x = 0;
             int y = 0;
-            while(x >= 0 && x <=7 && y >= 0 && y <=7) {
-                if (i == 0) {
-                x = pieza.getX() - c;
-                y = pieza.getY() - c;
-                } else if (i == 1) {
-                x = pieza.getX() + c;
-                y = pieza.getY() - c;                
-                } else if (i == 2) {
-                x = pieza.getX() - c;
-                y = pieza.getY() + c;                
-                } else {
-                x = pieza.getX() + c;
-                y = pieza.getY() + c;                                
-                }
+            while(x >= 0 && x <=7 && y >= 0 && y <=7 && moveIsPosible) {
+
+                x = (i == 0 || i == 2) ? pieza.getX() - c : pieza.getX() + c;
+                y = (i <= 1) ? pieza.getY() - c : pieza.getY() + c;
+
                 for (Pieza piezaC : piezas) {
-                    if (moveIsPosible) {
-                        if (x == piezaC.getX() && y == piezaC.getY()) {
-                            if (piezaC.isWhite() == pieza.isWhite()) {
-                                moveIsPosible = false;
-                                c++;
-                            }
-                            if (piezaC.isWhite() != pieza.isWhite()) {
-                                moves.add(new Position(x, y));
-                                moveIsPosible = false;
-                                c++;
-                            }
+                    if (x == piezaC.getX() && y == piezaC.getY()) {
+                        samePosition = true;
+                        if (piezaC.isWhite() != pieza.isWhite()) {
+                            difColor = true;
                         }
                     }
-                }                      
-                if (moveIsPosible) {
+                }
+                if (samePosition) {
+                    if (difColor) {
+                        moves.add(new Position(x, y));
+                        moveIsPosible = false;
+                    } else {
+                        moveIsPosible = false;
+                    }
+                } else {
                     moves.add(new Position(x, y));
-                    c++;
-                } else c++;
+                }
+                c++;
             }
         }        
     }
     
     private static void addRectMoves(Pieza pieza, List<Pieza> piezas,  List<Position> moves) {
-        
         for (int i = 0; i < 4; i++) {
-
             boolean moveIsPosible = true;
+            boolean samePosition = false;
+            boolean difColor = false;
             int c = 1;
             int x = 0;
             int y = 0;
-            while(x >= 0 && x <=7 && y >= 0 && y <=7) {
+            while(x >= 0 && x <=7 && y >= 0 && y <=7 && moveIsPosible) {
 
-                if (i == 0) {
-                x = pieza.getX() - c;
-                y = pieza.getY();
-                } else if (i == 1) {
-                x = pieza.getX() + c;
-                y = pieza.getY();
-                } else if (i == 2) {
-                x = pieza.getX();
-                y = pieza.getY() - c;
-                } else {
-                x = pieza.getX();
-                y = pieza.getY() + c;
-                }
+                x = (i == 0) ? pieza.getX() - c :
+                    (i == 1) ? pieza.getX() + c :
+                    pieza.getX();
+                y = (i == 2) ? pieza.getY() - c :
+                    (i == 3) ? pieza.getY() + c :
+                    pieza.getY();
+
                 for (Pieza piezaC : piezas) {
-                    if (moveIsPosible) {
                         if (x == piezaC.getX() && y == piezaC.getY()) {
-                            if (piezaC.isWhite() == pieza.isWhite()) {
-                                moveIsPosible = false;
-                                c++;
-                            }
+                            samePosition = true;
                             if (piezaC.isWhite() != pieza.isWhite()) {
-                                moves.add(new Position(x, y));
-                                moveIsPosible = false;
-                                c++;
+                                difColor = true;
                             }
                         }
+                }
+                if (samePosition) {
+                    if (difColor) {
+                        moves.add(new Position(x, y));
+                        moveIsPosible = false;
+                    } else {
+                        moveIsPosible = false;
                     }
-                }                      
-                if (moveIsPosible) {
+                } else {
                     moves.add(new Position(x, y));
-                    c++;
-                }else c++;
+                }
+                c++;
             }
         }
     }

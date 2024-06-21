@@ -7,16 +7,11 @@ import java.awt.Graphics2D;
 
 
 public class Tablero {
-    
-    private Juego juego;
-    
-    //public int[][] tableroCoor = new int[8][8];
-    
+
     // Squre colors
     private final Color BROWN = new Color(169,119,0);
     private final Color CREAM = new Color(255,255,153);
-    
-    
+
     public Tablero() {}
     
     public void paint(Graphics2D g) {

@@ -8,13 +8,15 @@ import javax.swing.JFrame;
 
 
 public class Frame {
+
+    private static final int width = (System.getProperty("os.name").toLowerCase().contains("win")) ? 495 : 480;
+
     public static void start() {
-        
         JFrame frame = new JFrame("Ajedrez");
         Juego juego = new Juego();
         Board board = new Board(juego);
         frame.add(board);
-        frame.setSize(480, 480 + Const.SUP_BAR_HEIGHT);
+        frame.setSize(width, 480 + Const.SUP_BAR_HEIGHT);
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

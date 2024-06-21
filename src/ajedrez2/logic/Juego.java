@@ -64,7 +64,6 @@ public class Juego {
         
         whiteKing = piezas.get(15);
         blackKing = piezas.get(31);
-        
     }
     
     public void setPiezaSeleccionada(Pieza pieza) {
@@ -100,24 +99,23 @@ public class Juego {
         setPiezaSeleccionada(getPieza((int) e.getX(), (int) e.getY()));
                 
         if (piezaSeleccionada != null) {
+            //todo borrar print
             System.out.println("Position x: " + piezaSeleccionada.getX() + " y: " + piezaSeleccionada.getY());
+            //todo borrar print en stream
             piezaSeleccionada.getPosibleMoves().forEach(m -> System.out.println(m.getX() + "    " + m.getY()));
             if (piezaSeleccionada.isWhite() != turn) 
                 piezaSeleccionada = null;     
         }
-        
         if (isCheck()){
             verifyIfMovesCoverCheck();
         }
-            
     }
     
     public void releasePiece(MouseEvent e) {
-     
         if (piezaSeleccionada != null) {
             
             for (Position move : posibleMoves) {
-
+                // todo borrar print
                 System.out.println(move.getX() + "  " + move.getY());
 
                 // Verfifica si al momento de soltar el boton del raton el cursor se
@@ -137,11 +135,12 @@ public class Juego {
                     
                     if (piezaSeleccionada.getName().equals(PieceName.PAWN))
                         enPassant();
+
                     
                     lastMovedPiece = piezaSeleccionada;
                             
                     piezaSeleccionada.findPosibleMoves();
-
+                    //todo borrar print
                     System.out.println(piezaSeleccionada.getMovements());
 
                     setPiezaSeleccionada(null);
@@ -169,9 +168,7 @@ public class Juego {
     }
     
     public List<Position> getPosibleMoves() {
-        
         return posibleMoves;
-        //return pieza.getPosibleMoves(piezas);
     }
     
     
@@ -200,12 +197,8 @@ public class Juego {
                
         }     
     }
-    
-    public boolean isCheckWhitSimulatedMoves() {
-        Pieza king = turn ? whiteKing : blackKing;
-        return false;
-    }
-    
+
+    // busca si algun movimiento de alguna pieza coincide con la posicion del rey contrario
     public boolean isCheck() {
         
         Pieza king = turn ? whiteKing : blackKing;
@@ -226,7 +219,6 @@ public class Juego {
     }
     
     public void dragPiece(MouseEvent e) {
-        
         if (piezaSeleccionada != null && turn == piezaSeleccionada.isWhite()) {
             piezaSeleccionada.drag(e.getX(), e.getY());
         }
@@ -247,16 +239,11 @@ public class Juego {
                     coverMoves.add(move);
                 }
             }
-            
             posibleMoves = coverMoves;
-            
         }
     }
 
     private boolean coverCheck(Position move) {
-        //int realX = piezaSeleccionada.getX();
-        //int realY = piezaSeleccionada.getY();
- 
         piezaSeleccionada.simulateMove(move.getX(), move.getY(), findByPosition(move.getX(), move.getY()));
         if (!isCheck()) {
             piezaSeleccionada.backMove();
@@ -267,7 +254,6 @@ public class Juego {
     }
     
     public static Pieza findByPosition(int x, int y) {
-        
         for (Pieza actualPieza : piezas) {
             if (actualPieza.getX() == x && actualPieza.getY() == y)
                 return actualPieza;
@@ -277,7 +263,6 @@ public class Juego {
     
     public void enPassant() {
         if (piezaSeleccionada != null) {
-            
             Pieza backPawn;
             if (piezaSeleccionada.isWhite()) {
                 if (piezaSeleccionada.getY() + 1 == piezaSeleccionada.getPreviousY() &&
@@ -312,9 +297,4 @@ public class Juego {
                     && y >= (yInf * Const.SQR_SIDE) + Const.SUP_BAR_HEIGHT
                     && y <= ((yInf * Const.SQR_SIDE) + Const.SQR_SIDE) + Const.SUP_BAR_HEIGHT);
     }
-
-
-        
-    
-    
 }

@@ -23,8 +23,6 @@ public class MouseActions {
                 } else {
                     System.out.println("gil");
                 }
-                
-
             }
 
             @Override
