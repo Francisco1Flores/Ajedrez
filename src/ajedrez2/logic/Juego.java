@@ -7,11 +7,10 @@ import java.util.ArrayList;
 
 
 public class Juego {
-    
-    
+
     private static List<Pieza> piezas = new ArrayList();
     
-    Pieza piezaSeleccionada = null;
+    private Pieza piezaSeleccionada = null;
     private static Pieza lastMovedPiece = null;
     
     List<Position> posibleMoves;
@@ -20,8 +19,6 @@ public class Juego {
     
     private final boolean white = true;
     private final boolean black = false;
-    
-    private boolean check = false;
     
     Pieza whiteKing;
     Pieza blackKing;
@@ -96,7 +93,7 @@ public class Juego {
     
     public void selectPiece(MouseEvent e) {
         
-        setPiezaSeleccionada(getPieza((int) e.getX(), (int) e.getY()));
+        setPiezaSeleccionada(getPieza(e.getX(), e.getY()));
                 
         if (piezaSeleccionada != null) {
             //todo borrar print
@@ -106,9 +103,7 @@ public class Juego {
             if (piezaSeleccionada.isWhite() != turn) 
                 piezaSeleccionada = null;     
         }
-        if (isCheck()){
-            verifyIfMovesCoverCheck();
-        }
+        verifyIfMovesCoverCheck();
     }
     
     public void releasePiece(MouseEvent e) {
@@ -151,13 +146,12 @@ public class Juego {
                     // puede moverse se vuelve la pieza a su casilla original
                     if (piezaSeleccionada != null) {
                         piezaSeleccionada.move(piezaSeleccionada.getX() * Const.SQR_SIDE,
-                                piezaSeleccionada.getY() * Const.SQR_SIDE + Const.SUP_BAR_HEIGHT);
+                                piezaSeleccionada.getY() * Const.SQR_SIDE /*+ Const.SUP_BAR_HEIGHT*/);
                     }
                 }
             }    
         }
     }
-    
 
     public Pieza getPieza(int x, int y) {
         for (Pieza pieza : piezas) {
@@ -171,7 +165,6 @@ public class Juego {
         return posibleMoves;
     }
     
-    
     public void castle() {
         if (piezaSeleccionada != null) {
                            
@@ -180,7 +173,7 @@ public class Juego {
                 && piezaSeleccionada.getY() == piezaSeleccionada.getPreviousY()) {
 
                 Pieza torre = Moves.findByposition(piezas, piezaSeleccionada.getX() + 1, piezaSeleccionada.getY());
-                torre.move(5 * Const.SQR_SIDE, (torre.getY() * Const.SQR_SIDE) + Const.SUP_BAR_HEIGHT);
+                torre.move(5 * Const.SQR_SIDE, torre.getY() * Const.SQR_SIDE);
                 torre.setXY(5, torre.getY(), false);
                 torre = null;
 
@@ -190,7 +183,7 @@ public class Juego {
                 && piezaSeleccionada.getY() == piezaSeleccionada.getPreviousY()) {
 
                 Pieza torre = Moves.findByposition(piezas, piezaSeleccionada.getX() - 2, piezaSeleccionada.getY());
-                torre.move(3 * Const.SQR_SIDE, (torre.getY() * Const.SQR_SIDE) + Const.SUP_BAR_HEIGHT);
+                torre.move(3 * Const.SQR_SIDE, torre.getY() * Const.SQR_SIDE);
                 torre.setXY(3, torre.getY(), false);
                 torre = null;                    
             }     
@@ -200,23 +193,19 @@ public class Juego {
 
     // busca si algun movimiento de alguna pieza coincide con la posicion del rey contrario
     public boolean isCheck() {
-        
         Pieza king = turn ? whiteKing : blackKing;
-        
         for (Pieza cPieza : piezas) {
             cPieza.findPosibleMoves();
             if (cPieza.isAlive()) {
                 for (Position move : cPieza.getPosibleMoves()) {
                     if (move.getX() == king.getX() && move.getY() == king.getY() && cPieza.isWhite() != turn) {
                         System.out.println("encontrado jaque");
-                        check = true;
                         return true;
                     }
                 }
             }
         }
         System.out.println("no hay jaque");
-        check = false;
         return false;               
     }
     
@@ -294,9 +283,9 @@ public class Juego {
     }
     
     private boolean isInRange(int x, int y, int xInf, int yInf) {
-        return (x >= (xInf * Const.SQR_SIDE) 
-                    && x <= ((xInf * Const.SQR_SIDE) + Const.SQR_SIDE)
-                    && y >= (yInf * Const.SQR_SIDE) + Const.SUP_BAR_HEIGHT
-                    && y <= ((yInf * Const.SQR_SIDE) + Const.SQR_SIDE) + Const.SUP_BAR_HEIGHT);
+        return (x >= (xInf * Const.SQR_SIDE)
+                && x <= ((xInf * Const.SQR_SIDE) + Const.SQR_SIDE)
+                && y >= (yInf * Const.SQR_SIDE)
+                && y <= ((yInf * Const.SQR_SIDE) + Const.SQR_SIDE));
     }
 }

@@ -42,7 +42,6 @@ public class Board extends JPanel {
     public void paintMoves(Graphics2D g2d) {
         for (Position move : juego.getPosibleMoves()) {
             for (Pieza pieza : juego.getListaPiezas()) {
-                
                 if (move.getX() == pieza.getX() && move.getY() == pieza.getY()) { 
                     paintThreat(g2d, move);    
                 } 

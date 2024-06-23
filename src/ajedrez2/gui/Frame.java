@@ -20,7 +20,7 @@ public class Frame {
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        MouseActions.mouseActions(frame, juego);
+        MouseActions.mouseActions(juego, board);
         
         while (true) {
             try {

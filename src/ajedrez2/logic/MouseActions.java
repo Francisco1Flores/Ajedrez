@@ -1,20 +1,15 @@
 package ajedrez2.logic;
 
-
-import ajedrez2.logic.Juego;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class MouseActions {
-    
-    private long timeStart;
-    private long timeStop;
 
-    public static void mouseActions(JFrame frame, Juego juego) {
-        
-        frame.addMouseListener(new MouseListener() {
+    public static void mouseActions(Juego juego, JPanel board) {
+
+        board.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {                
                 
@@ -49,8 +44,8 @@ public class MouseActions {
                 
             }
         });
-        
-        frame.addMouseMotionListener(new MouseMotionListener() {
+
+        board.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
                 juego.dragPiece(e);

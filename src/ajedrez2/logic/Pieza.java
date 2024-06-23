@@ -116,12 +116,12 @@ public class Pieza {
 
     public void move(int x, int y) {
         xToPaint = (x / Const.SQR_SIDE) * Const.SQR_SIDE;
-        yToPaint = ((y - Const.SUP_BAR_HEIGHT)  / Const.SQR_SIDE) * Const.SQR_SIDE;
+        yToPaint = (y  / Const.SQR_SIDE) * Const.SQR_SIDE;
     }
     
     public void drag(int x, int y) {
         xToPaint = x - Const.H_SQR_SIDE;
-        yToPaint = y - (Const.H_SQR_SIDE_Y + Const.SUP_BAR_HEIGHT);
+        yToPaint = y - Const.H_SQR_SIDE;
     }
     
     void simulateMove(int x, int y, Pieza piece){
