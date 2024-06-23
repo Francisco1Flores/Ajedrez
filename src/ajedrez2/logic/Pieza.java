@@ -166,6 +166,11 @@ public class Pieza {
         movesList = Moves.getMoves(this, Juego.getListaPiezas());
     }
 
+    public void setPosibleMoves(List<Position> moves) {
+        movesList = moves;
+    }
+
+
     void setMovements(int i) {
         movements = i;
     }

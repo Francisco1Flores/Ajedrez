@@ -67,7 +67,7 @@ public class Juego {
         piezaSeleccionada = pieza;
         if (piezaSeleccionada != null) {
             piezaSeleccionada.findPosibleMoves();
-            posibleMoves = piezaSeleccionada.getPosibleMoves();
+            //posibleMoves = piezaSeleccionada.getPosibleMoves();
         }
     }
     
@@ -103,7 +103,9 @@ public class Juego {
             if (piezaSeleccionada.isWhite() != turn) 
                 piezaSeleccionada = null;     
         }
-        verifyIfMovesCoverCheck();
+        if (piezaSeleccionada != null) {
+            verifyIfMovesCoverCheck(piezaSeleccionada);
+        }
     }
     
     public void releasePiece(MouseEvent e) {
@@ -140,6 +142,12 @@ public class Juego {
 
                     setPiezaSeleccionada(null);
 
+                    if (isCheckMate()) {
+                        finishGame();
+                    } else {
+                        System.out.println("No hay jaque mate");
+                    }
+
                 // Verifica que la pieza se solto en una casilla a la que no podia moverse    
                 } else {
                     // Si hay una pieza seleccionada y se suelta en una casilla a la que no
@@ -151,6 +159,27 @@ public class Juego {
                 }
             }    
         }
+    }
+
+    //todo implementar finalización del juego
+    private void finishGame() {
+        System.out.println("------checkmate-------");
+        String winner = (!turn) ? "BLANCAS" : "NEGRAS";
+        System.out.println(winner +" GANAN");
+    }
+
+    //todo implementar jaque mate
+    private boolean isCheckMate() {
+        for(Pieza piece : piezas) {
+            if(piece.isWhite() == turn) {
+                piece.findPosibleMoves();
+                verifyIfMovesCoverCheck(piece);
+                if (piece.getPosibleMoves().size() > 1) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public Pieza getPieza(int x, int y) {
@@ -215,32 +244,27 @@ public class Juego {
         }
     }
 
-    private void verifyIfMovesCoverCheck() {
-        if (piezaSeleccionada != null) {
-            
+    private void verifyIfMovesCoverCheck(Pieza piece) {
+        if (piece != null) {
             List<Position> coverMoves = new ArrayList<>();
             coverMoves.add(new Position(8,8));
-            
-            // TODO verificar si al simular los movimientos el jaque se cubre
-            // verificar si es jaque con pas posiciones simuladas de las piezas
-            // y con el estado simulado (si el estado simulado es false sus movimientos no se tienen
-            // en cuenta
-            for (Position move : posibleMoves) {
-                if (coverCheck(move)) {
+            for (Position move : piece.getPosibleMoves()) {
+                if (coverCheck(move, piece)) {
                     coverMoves.add(move);
                 }
             }
+            piece.setPosibleMoves(coverMoves);
             posibleMoves = coverMoves;
         }
     }
 
-    private boolean coverCheck(Position move) {
-        piezaSeleccionada.simulateMove(move.getX(), move.getY(), findByPosition(move.getX(), move.getY()));
+    private boolean coverCheck(Position move, Pieza piece) {
+        piece.simulateMove(move.getX(), move.getY(), findByPosition(move.getX(), move.getY()));
         if (!isCheck()) {
-            piezaSeleccionada.backMove(findByPosition(move.getX(), move.getY()));
+            piece.backMove(findByPosition(move.getX(), move.getY()));
             return true;
         }
-        piezaSeleccionada.backMove(findByPosition(move.getX(), move.getY()));
+        piece.backMove(findByPosition(move.getX(), move.getY()));
         return false;
     }
     

@@ -30,7 +30,6 @@ public class Moves {
     private static List<Position> getPeonMoves(Pieza pieza, List<Pieza> piezas) {
             
         List<Position> moves = new ArrayList();
-        moves.add(new Position(8,8));
         
         boolean pieceInFront = false;
         boolean pieceInFront2Sqr = false;
@@ -224,7 +223,7 @@ public class Moves {
                 x = (i == 0 || i == 2) ? pieza.getX() - c : pieza.getX() + c;
                 y = (i < 2) ? pieza.getY() - c : pieza.getY() + c;
 
-                if(x >= 0 && x < 7 && y >= 0 && y < 7) {
+                if(x >= 0 && x <= 7 && y >= 0 && y <= 7) {
                     for (Pieza piezaC : piezas) {
                         if (x == piezaC.getX() && y == piezaC.getY()) {
                             samePosition = true;
@@ -264,7 +263,7 @@ public class Moves {
                     (i == 3) ? pieza.getY() + c :
                     pieza.getY();
 
-                if(x >= 0 && x < 7 && y >= 0 && y < 7) {
+                if(x >= 0 && x <= 7 && y >= 0 && y <= 7) {
                     for (Pieza piezaC : piezas) {
                         if (x == piezaC.getX() && y == piezaC.getY()) {
                             samePosition = true;
