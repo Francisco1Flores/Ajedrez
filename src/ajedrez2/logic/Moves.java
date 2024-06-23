@@ -111,16 +111,18 @@ public class Moves {
             boolean difColor = false;
             int x = pieza.getX() + cm[i][0];
             int y = pieza.getY() + cm[i][1];
-            
-            for (Pieza piezaC : piezas) {
-                if (x == piezaC.getX() && y == piezaC.getY()) {
-                    samePosition = true;
-                    if (piezaC.isWhite() != pieza.isWhite()) {
-                        difColor = true;
+
+            if (x >= 0 && x < 7 && y >= 0 && y < 7) {
+                for (Pieza piezaC : piezas) {
+                    if (x == piezaC.getX() && y == piezaC.getY()) {
+                        samePosition = true;
+                        if (piezaC.isWhite() != pieza.isWhite()) {
+                            difColor = true;
+                        }
                     }
                 }
+                if (!samePosition || difColor) moves.add(new Position(x, y));
             }
-            if (!samePosition || difColor) moves.add(new Position(x, y));
         }
         return moves;
     }
@@ -208,15 +210,7 @@ public class Moves {
         }
         return true;
     }
-    
-    public static Pieza findByposition(List<Pieza> piezas, int x, int y) {
-        for (Pieza actualPieza : piezas) {
-            if (actualPieza.getX() == x && actualPieza.getY() == y)
-                return actualPieza;
-        }
-        return null;    
-    }
-    
+
     private static void addDiagonalMoves(Pieza pieza, List<Pieza> piezas,  List<Position> moves) {
         for (int i = 0; i < 4; i++) {
             boolean moveIsPosible = true;
@@ -225,28 +219,28 @@ public class Moves {
             int c = 1;
             int x = 0;
             int y = 0;
-            while(x >= 0 && x <=7 && y >= 0 && y <=7 && moveIsPosible) {
+            while(x >= 0 && x < 7 && y >= 0 && y < 7 && moveIsPosible) {
 
                 x = (i == 0 || i == 2) ? pieza.getX() - c : pieza.getX() + c;
-                y = (i <= 1) ? pieza.getY() - c : pieza.getY() + c;
+                y = (i < 2) ? pieza.getY() - c : pieza.getY() + c;
 
-                for (Pieza piezaC : piezas) {
-                    if (x == piezaC.getX() && y == piezaC.getY()) {
-                        samePosition = true;
-                        if (piezaC.isWhite() != pieza.isWhite()) {
-                            difColor = true;
+                if(x >= 0 && x < 7 && y >= 0 && y < 7) {
+                    for (Pieza piezaC : piezas) {
+                        if (x == piezaC.getX() && y == piezaC.getY()) {
+                            samePosition = true;
+                            if (piezaC.isWhite() != pieza.isWhite()) {
+                                difColor = true;
+                            }
                         }
                     }
-                }
-                if (samePosition) {
-                    if (difColor) {
-                        moves.add(new Position(x, y));
+                    if (samePosition) {
+                        if (difColor) {
+                            moves.add(new Position(x, y));
+                        }
                         moveIsPosible = false;
                     } else {
-                        moveIsPosible = false;
+                        moves.add(new Position(x, y));
                     }
-                } else {
-                    moves.add(new Position(x, y));
                 }
                 c++;
             }
@@ -261,7 +255,7 @@ public class Moves {
             int c = 1;
             int x = 0;
             int y = 0;
-            while(x >= 0 && x <=7 && y >= 0 && y <=7 && moveIsPosible) {
+            while(x >= 0 && x <7 && y >= 0 && y < 7 && moveIsPosible) {
 
                 x = (i == 0) ? pieza.getX() - c :
                     (i == 1) ? pieza.getX() + c :
@@ -270,23 +264,23 @@ public class Moves {
                     (i == 3) ? pieza.getY() + c :
                     pieza.getY();
 
-                for (Pieza piezaC : piezas) {
+                if(x >= 0 && x < 7 && y >= 0 && y < 7) {
+                    for (Pieza piezaC : piezas) {
                         if (x == piezaC.getX() && y == piezaC.getY()) {
                             samePosition = true;
                             if (piezaC.isWhite() != pieza.isWhite()) {
                                 difColor = true;
                             }
                         }
-                }
-                if (samePosition) {
-                    if (difColor) {
-                        moves.add(new Position(x, y));
+                    }
+                    if (samePosition) {
+                        if (difColor) {
+                            moves.add(new Position(x, y));
+                        }
                         moveIsPosible = false;
                     } else {
-                        moveIsPosible = false;
+                        moves.add(new Position(x, y));
                     }
-                } else {
-                    moves.add(new Position(x, y));
                 }
                 c++;
             }
@@ -322,5 +316,13 @@ public class Moves {
             }
         }
     }
-    
+
+    public static Pieza findByposition(List<Pieza> piezas, int x, int y) {
+        for (Pieza actualPieza : piezas) {
+            if (actualPieza.getX() == x && actualPieza.getY() == y)
+                return actualPieza;
+        }
+        return null;
+    }
 }
+

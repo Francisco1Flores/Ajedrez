@@ -23,8 +23,7 @@ public class MouseActions {
             @Override
             public void mousePressed(MouseEvent e) {
                 
-                if (juego.isCheck()) System.out.println("Jaque");
-                
+                //if (juego.isCheck()) System.out.println("Jaque");
                 // Selecciona la pieza de acuerdo a la posicion del raton
                 juego.selectPiece(e);    
             }
