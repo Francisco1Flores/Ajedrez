@@ -254,7 +254,7 @@ public class Moves {
             int c = 1;
             int x = 0;
             int y = 0;
-            while(x >= 0 && x <7 && y >= 0 && y < 7 && moveIsPosible) {
+            while (x >= 0 && x <= 7 && y >= 0 && y <= 7 && moveIsPosible) {
 
                 x = (i == 0) ? pieza.getX() - c :
                     (i == 1) ? pieza.getX() + c :
@@ -263,7 +263,7 @@ public class Moves {
                     (i == 3) ? pieza.getY() + c :
                     pieza.getY();
 
-                if(x >= 0 && x <= 7 && y >= 0 && y <= 7) {
+                if (x >= 0 && x <= 7 && y >= 0 && y <= 7) {
                     for (Pieza piezaC : piezas) {
                         if (x == piezaC.getX() && y == piezaC.getY()) {
                             samePosition = true;

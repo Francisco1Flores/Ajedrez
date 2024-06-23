@@ -142,10 +142,16 @@ public class Juego {
 
                     setPiezaSeleccionada(null);
 
-                    if (isCheckMate()) {
-                        finishGame();
+                    if (isCheck()) {
+                        if (isCheckMate()) {
+                            finishGame();
+                        } else {
+                            System.out.println("No hay jaque mate");
+                        }
                     } else {
-                        System.out.println("No hay jaque mate");
+                        if (isCheckMate()) {
+                            System.out.println("TABLAS");
+                        }
                     }
 
                 // Verifica que la pieza se solto en una casilla a la que no podia moverse    
